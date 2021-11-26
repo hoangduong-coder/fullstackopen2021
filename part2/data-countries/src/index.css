@@ -1,0 +1,15 @@
+*{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+#image{
+  width: 20%;
+}
+#countryInfo{
+  background-color: #F0FFF0;
+  border-radius: 10px;
+  padding: 5px 20px 20px;
+  margin-top: 5px;
+}
+#general{
+  font-size: 18px;
+}
