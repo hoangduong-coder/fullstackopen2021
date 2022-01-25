@@ -29,12 +29,12 @@ router.delete('/:id', async (request, response) => {
 
   const user = await User.findById(decodedToken.id)
   const blog = await Blog.findById(request.params.id)
-  if (blog.user.toString() !== user.id.toString()) {
+  if (blog.user._id.toString() !== user.id) {
     return response.status(401).json({ error: 'only the creator can delete blogs' })
   }
 
   await blog.remove()
-  user.blogs = user.blogs.filter(b => b.id.toString() !== request.params.id.toString())
+  user.blogs = user.blogs.filter(b => b.id.toString() !== request.params.id)
   await user.save()
   response.status(204).end()
 })

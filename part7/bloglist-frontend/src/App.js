@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux'
 import { initializeBlog } from './reducer/blogReducer'
 import blogService from './services/blogs'
 import { initUserList } from './reducer/userReducer'
+import './index.css'
+
 const App = () => {
   const dispatch = useDispatch()
 

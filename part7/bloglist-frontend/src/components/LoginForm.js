@@ -26,7 +26,7 @@ const LoginForm = () => {
           <Form.Control type="text" name="Username"/>
           <Form.Label>Password </Form.Label>
           <Form.Control type="password" name="Password"/>
-          <Button variant='primary' type="submit">
+          <Button variant='primary' type="submit" id="single-button">
             Log in
           </Button>
         </Form.Group>

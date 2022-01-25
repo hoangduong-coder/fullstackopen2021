@@ -1,0 +1,20 @@
+body{
+    margin: 0;
+    width: 100%; 
+}
+html{
+    scroll-behavior: smooth;
+}
+#button-combined{
+    display: flex;
+    justify-items: center;
+}
+#single-button{
+    margin: 10px 0px;
+}
+#multiple-button{
+    margin: 5px 10px;
+}
+#icon{
+    margin-right: 5px;
+}
