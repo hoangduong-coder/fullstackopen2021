@@ -25,6 +25,14 @@ const Blog = ({ blogs, loginUser }) => {
       <p>Likes: {blog.likes}</p>
       <button onClick={() => like(blog)}>Like</button>
       <p>{loginUser.name}</p>
+      <h2>Comments</h2>
+      <ul>
+        {
+          blog.comment.map((obj,index) =>
+            <li key={index}>{obj}</li>
+          )
+        }
+      </ul>
       {
         (blog.user !== undefined) && <button onClick={() => clearBlog(blog)}>Remove</button>
       }

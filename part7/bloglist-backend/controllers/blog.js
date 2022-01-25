@@ -75,4 +75,15 @@ router.post('/', async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
+router.post('/:id/comments', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  const body = request.body
+  if(!body.comment) {
+    return response.status(400).send({ error: 'comment missing' })
+  }
+  blog.comment = blog.comment.concat(body.comment)
+  await blog.save()
+  response.status(201).json(blog)
+})
+
 module.exports = router
