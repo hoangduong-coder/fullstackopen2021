@@ -40,6 +40,21 @@ const PatientData = () => {
                 </h2>
                 <p>Social-security-number: {patientData.ssn}</p>
                 <p>Occupation: {patientData.occupation}</p>
+                {
+                    patientData.entries.map(obj => 
+                        <div key={obj.id}>
+                            <p><b>{obj.date}:</b>{" " + obj.description}</p>
+                            <ul>
+                                {
+                                    obj.diagnosisCodes?.map(code => 
+                                    <li key={code}>
+                                        {code}
+                                    </li>)
+                                }
+                            </ul>
+                        </div>    
+                    )
+                }
             </Container>
         </div>
     );
