@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React, { useEffect } from "react";
-import { Patient } from "../types";
+import { Diagnosis, Patient } from "../types";
 import { useParams } from "react-router-dom";
 import { Container, Icon, SemanticICONS } from "semantic-ui-react";
 import { useStateValue, fetchPatient } from "../state";
@@ -11,6 +11,10 @@ import { apiBaseUrl } from "../constants";
 const PatientData = () => {
     const { id } = useParams<{ id: string }>();
     const [{ patientData }, dispatch] = useStateValue();
+    const [{ diagnosis },] = useStateValue();
+    const diagnosisList = (arr: Array<Diagnosis['code']>) : Diagnosis[] => {
+        return diagnosis.filter(obj => arr.includes(obj.code));
+    };
     useEffect(() => {
         const fetchPatientData = async () => {
             try {
@@ -23,6 +27,7 @@ const PatientData = () => {
         }};
         void fetchPatientData();
     }, [dispatch]);
+
     const iconName = (arg: string) : SemanticICONS => {
         if(arg === "male") return "mars";
         else if(arg === 'female') return "venus";
@@ -46,10 +51,12 @@ const PatientData = () => {
                             <p><b>{obj.date}:</b>{" " + obj.description}</p>
                             <ul>
                                 {
-                                    obj.diagnosisCodes?.map(code => 
-                                    <li key={code}>
-                                        {code}
-                                    </li>)
+                                    obj.diagnosisCodes &&
+                                    diagnosisList(obj.diagnosisCodes).map(diagnose =>
+                                        <li key={diagnose.code}>
+                                            <b>{diagnose.code}:</b>{" " + diagnose.name}
+                                        </li>
+                                    )
                                 }
                             </ul>
                         </div>    
