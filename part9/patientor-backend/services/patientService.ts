@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import patientList from '../data/patients';
-import { Patient, NonSsnPatient, NewPatientEntry } from '../types';
+import { Patient, NonSsnPatient, NewPatientEntry, Entry } from '../types';
 import { v1 as uuid } from 'uuid';
 
 const getEntries = (): Array<Patient> => {
@@ -32,9 +34,16 @@ const addPatient = ( entry: NewPatientEntry ) : Patient => {
     return newPatient;
 };
 
+
+const addEntry = ( patient: Patient, entry: Entry ) : Patient => {
+    patient.entries.push(entry);
+    return patient;
+};
+
 export default {
     getEntries,
     addPatient,
     getNonSsnEntries,
-    findById
+    findById,
+    addEntry
 };
