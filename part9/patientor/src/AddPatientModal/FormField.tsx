@@ -10,7 +10,7 @@ export type GenderOption = {
 };
 
 // props for select field component
-type SelectFieldProps = {
+type GenderSelectFieldProps = {
   name: string;
   label: string;
   options: GenderOption[];
@@ -20,7 +20,7 @@ export const SelectField = ({
   name,
   label,
   options
-}: SelectFieldProps) => (
+}: GenderSelectFieldProps) => (
   <Form.Field>
     <label>{label}</label>
     <Field as="select" name={name} className="ui dropdown">
