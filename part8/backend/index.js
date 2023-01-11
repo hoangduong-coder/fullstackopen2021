@@ -1,4 +1,4 @@
-const {ApolloServer, gql} = require ('apollo-server');
+const {ApolloServer, UserInputError, gql} = require ('apollo-server');
 const {v1: uuid} = require ('uuid');
 const mongoose = require ('mongoose');
 const Book = require ('./schema/Book');
@@ -20,7 +20,7 @@ const typeDefs = gql`
   type Author {
     name: String!
     id: ID!
-    born: Int
+    born: Int!
     bookCount: Int
   }
 
@@ -51,52 +51,45 @@ const typeDefs = gql`
   }
 `;
 
-// const resolvers = {
-//   Query: {
-//     bookCount: () => books.length,
-//     authorCount: () => authors.length,
-//     // allBooks: (root, args) => books.filter (b => b.author === args.author),
-//     // allBooks: (root, args) => books.filter (b => b.genres.includes (args.genre)),\
-//     allBooks: () => books,
-//     allAuthors: () => authors,
-//   },
-//   Author: {
-//     bookCount: root => {
-//       return books.filter (obj => obj.author === root.name).length;
-//     },
-//   },
-//   Mutation: {
-//     addBook: (root, args) => {
-//       const book = {...args, id: uuid ()};
-//       books = books.concat (book);
-//       if (!authors.find (b => b.name === args.author)) {
-//         authors = authors.concat ({
-//           name: args.author,
-//           id: uuid (),
-//         });
-//       }
-//       return book;
-//     },
-//     editAuthor: (root, args) => {
-//       const author = authors.find (a => a.name === args.name);
-//       if (!author) {
-//         return null;
-//       }
-//       const updatedAuthor = {
-//         ...author,
-//         name: args.name,
-//         born: args.setBornTo,
-//       };
-//       authors = authors.map (
-//         obj =>
-//           obj.name === args.name || obj.born === args.setBornTo
-//             ? updatedAuthor
-//             : obj
-//       );
-//       return updatedAuthor;
-//     },
-//   },
-// };
+const resolvers = {
+  Query: {
+    bookCount: async () => Book.collection.countDocuments (),
+    authorCount: async () => Author.collection.countDocuments (),
+    allBooks: async () => {
+      return Book.find ({});
+    },
+    allAuthors: async () => {
+      return Author.find ({});
+    },
+  },
+  Author: {
+    bookCount: async root => {
+      return Book.find ({});
+    },
+  },
+  Mutation: {
+    addBook: async (root, args) => {
+      const author = await Author.findOne ({name: args.author});
+      const book = new Book ({...args, author: author});
+      await book.save ();
+
+      return book;
+    },
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne ({name: args.name});
+      author.name = args.name;
+      author.born = args.setBornTo;
+      try {
+        await author.save ();
+      } catch (error) {
+        throw new UserInputError (error.message, {
+          invalidArgs: args,
+        });
+      }
+      return author;
+    },
+  },
+};
 
 const server = new ApolloServer ({
   typeDefs,
