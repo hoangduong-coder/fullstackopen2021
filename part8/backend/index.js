@@ -55,7 +55,7 @@ const resolvers = {
   Query: {
     bookCount: async () => Book.collection.countDocuments (),
     authorCount: async () => Author.collection.countDocuments (),
-    allBooks: async () => {
+    allBooks: async (root, args) => {
       return Book.find ({});
     },
     allAuthors: async () => {
@@ -71,8 +71,13 @@ const resolvers = {
     addBook: async (root, args) => {
       const author = await Author.findOne ({name: args.author});
       const book = new Book ({...args, author: author});
-      await book.save ();
-
+      try {
+        await book.save ();
+      } catch (error) {
+        throw new UserInputError (error.message, {
+          invalidArgs: args,
+        });
+      }
       return book;
     },
     editAuthor: async (root, args) => {
