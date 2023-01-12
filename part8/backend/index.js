@@ -20,7 +20,7 @@ const typeDefs = gql`
   type Author {
     name: String!
     id: ID!
-    born: Int!
+    born: Int
     bookCount: Int
   }
 
@@ -35,7 +35,7 @@ const typeDefs = gql`
   type Query {
     bookCount: Int
     authorCount: Int
-    allBooks: [Book!]!
+    allBooks(author: String): [Book!]!
     allAuthors: [Author!]!
   }
 
@@ -56,7 +56,11 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments (),
     authorCount: async () => Author.collection.countDocuments (),
     allBooks: async (root, args) => {
-      return Book.find ({});
+      if (!args.author) {
+        return Book.find ({});
+      }
+      const author = await Author.findOne ({name: args.author});
+      return Book.find ({author: {$in: author.id}});
     },
     allAuthors: async () => {
       return Author.find ({});
@@ -64,7 +68,11 @@ const resolvers = {
   },
   Author: {
     bookCount: async root => {
-      return Book.find ({});
+      return Book.collection.countDocuments ({
+        author: {
+          $in: [String (root.id)],
+        },
+      });
     },
   },
   Mutation: {
