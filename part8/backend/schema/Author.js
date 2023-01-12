@@ -10,12 +10,8 @@ const schema = new mongoose.Schema ({
   born: {
     type: Number,
   },
-});
-
-schema.set ('toJSON', {
-  transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id.toString ();
-    delete returnedObject._id;
+  bookCount: {
+    type: Number,
   },
 });
 
