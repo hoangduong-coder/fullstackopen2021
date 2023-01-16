@@ -1,4 +1,4 @@
-import {ALL_AUTHORS, EDIT_BIRTHYEAR} from './queries';
+import {ALL_AUTHORS, EDIT_BIRTHYEAR} from '../queries';
 import {useMutation, useQuery} from '@apollo/client';
 
 import Select from 'react-select';
@@ -56,9 +56,7 @@ const Authors = props => {
           <span style={{marginRight: '10px'}}>Name</span>
           <Select
             defaultValue={name}
-            onChange={target => {
-              setName (target.value);
-            }}
+            onChange={target => setName (target.value)}
             options={options}
           />
         </div>

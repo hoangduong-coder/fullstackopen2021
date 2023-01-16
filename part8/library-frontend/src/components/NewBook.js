@@ -1,4 +1,4 @@
-import {ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK} from './queries';
+import {ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK} from '../queries';
 
 import {useMutation} from '@apollo/client';
 import {useState} from 'react';
