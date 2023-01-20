@@ -1,28 +1,43 @@
+import {ALL_BOOKS, BOOKS_BY_GENRE} from '../queries';
 import {useEffect, useState} from 'react';
 
-import {ALL_BOOKS} from '../queries';
 import {useQuery} from '@apollo/client';
 
 const Books = props => {
-  const result = useQuery (ALL_BOOKS);
   const [genre, setGenre] = useState ('all');
   const [books, setBooks] = useState (null);
+  const result_all = useQuery (ALL_BOOKS);
+  const result_byGenre = useQuery (BOOKS_BY_GENRE, {
+    variables: {genre},
+    skip: !genre,
+  });
 
   useEffect (
     () => {
-      if (result.data) {
-        setBooks (result.data.allBooks);
+      if (result_all.data) {
+        setBooks (result_all.data.allBooks);
       }
     },
-    [result.data]
+    [result_all.data]
+  );
+
+  useEffect (
+    () => {
+      if (result_byGenre.data) {
+        setBooks (result_byGenre.data.allBooks);
+      }
+    },
+    [result_byGenre.data]
   );
 
   if (!props.show) {
     return null;
   }
-  if (result.loading) return <p>Loading!</p>;
 
-  if (result.error) return <p>There is some error in loading this page!</p>;
+  if (result_all.loading || result_byGenre.loading) return <p>Loading!</p>;
+
+  if (result_all.error || result_byGenre.error)
+    return <p>There is some error in loading this page!</p>;
 
   const genresList = [...new Set (books.flatMap (b => b.genres))].concat (
     'all'
@@ -31,9 +46,7 @@ const Books = props => {
   const filterGenre = genre => {
     setGenre (genre);
     if (genre === 'all') {
-      setBooks (result.data.allBooks);
-    } else {
-      setBooks (books.filter (obj => obj.genres.includes (genre)));
+      setBooks (result_all.data.allBooks);
     }
   };
 
