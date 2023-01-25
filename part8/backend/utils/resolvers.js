@@ -5,7 +5,7 @@ const User = require ('../schema/User');
 const jwt = require ('jsonwebtoken');
 const config = require ('./config');
 const {PubSub} = require ('graphql-subscriptions');
-const pubsub = PubSub ();
+const pubsub = new PubSub ();
 const resolvers = {
   Query: {
     bookCount: async () => Book.collection.countDocuments (),
@@ -104,7 +104,7 @@ const resolvers = {
   },
   Subscription: {
     bookAdded: {
-      subscribe: () => pubsub.asyncIterator ('NEW_BOOK_ADDED'),
+      subscribe: () => pubsub.asyncIterator (['NEW_BOOK_ADDED']),
     },
   },
 };

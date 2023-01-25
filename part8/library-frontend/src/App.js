@@ -1,15 +1,27 @@
+import {
+  useApolloClient,
+  useSubscription,
+} from '@apollo/client';
+
+import { ADDBOOK_ANNOUNCEMENT } from './queries';
 import Authors from './components/Authors';
 import Books from './components/Books';
 import LoginForm from './components/LoginForm';
 import NewBook from './components/NewBook';
 import Recommend from './components/Recommend';
-import {useApolloClient} from '@apollo/client';
 import {useState} from 'react';
 
 const App = () => {
   const [page, setPage] = useState ('authors');
   const [token, setToken] = useState (null);
   const client = useApolloClient ();
+
+  useSubscription(ADDBOOK_ANNOUNCEMENT, {
+    onData: ({data}) => {
+      const result = data.data.bookAdded
+      window.alert (`${result.title} has been added`);
+    }
+  })
 
   const logout = () => {
     setToken (null);

@@ -49,7 +49,7 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    bookAdded: [Book!]!
+    bookAdded: Book!
   }
 `;
 
